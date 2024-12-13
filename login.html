@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<title>LPBank</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+	
+
+	<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/4.3.1/js/bootstrap.bundle.js"></script>
+	<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="/webjars/popper.js/1.14.3/popper.min.js" type="module"></script>
+	<script src="/webjars/momentjs/2.24.0/min/moment-with-locales.min.js"></script>
+    <!--	<script src="/webjars/vue/2.6.12/dist/vue.min.js"></script>-->
+    <!--	<script src="/webjars/axios/0.20.0/dist/axios.min.js"></script>-->
+
+    <script src="/js/slick.min.js" type="text/javascript"></script>
+	<script src="/js/swiper.min.js" type="text/javascript"></script>
+	<script src="/js/aos.js" type="text/javascript"></script>
+	<script src="/js/loadingoverlay.min.js" type="text/javascript"></script>
+    <script src="/js/print.min.js" type="text/javascript"></script>
+    <script src="/js/select2.full.min.js" type="text/javascript"></script>
+<!--	<script th:src="@{/js/jquery.sse.min.js}" type="text/javascript"></script>-->
+
+	<script src="/js/bootbox.all.min.js" type="text/javascript"></script>
+	<script src="/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+	<script src="/js/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="/js/web.js" type="text/javascript"></script>
+	<script src="/js/qrcode.js" type="text/javascript" defer></script>
+	<script src="/js/xls.js" type="text/javascript"></script>
+	<script src="/js/needchangepass.js" type="text/javascript"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- BOOTSTRAP -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&display=swap&subset=vietnamese" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" media="all" href="/webjars/bootstrap/4.3.1/css/bootstrap-grid.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/webjars/bootstrap/4.3.1/css/bootstrap-reboot.css">
+	<link rel="stylesheet" type="text/css" media="all" href="/webjars/bootstrap/4.3.1/css/bootstrap.css">
+
+	<!-- CUSTOM -->
+    <link rel="stylesheet" type="text/css" media="all" href="/css/slick.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/swiper.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/slick-theme.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/aos.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/hover.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/print.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/scss/style.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/custom.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/skeleton.min.css">
+    <link rel="stylesheet" href="/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/css/bootstrap-datetimepicker.min.css">
+	<script>
+		function changeLang(e) {
+			window.location.replace(window.location.pathname + '?lang=' + e);
+		}
+	</script>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZK34RR4MC7"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+ 	 	function gtag(){dataLayer.push(arguments);}
+  		gtag('js', new Date());
+
+  		gtag('config', 'G-ZK34RR4MC7');
+	</script>
+	
+        <script>
+            let postUrl = null;
+            let token = $("meta[name='_csrf']").attr("content");
+        </script>
+        <script src="/js/accard.js" type="text/javascript"></script>
+        <meta name="_csrf" content="e67c8998-e318-4bd8-88ca-6531be908aa3"/>
+    
+
+</head>
+<body>
+<header class="header">
+
+	<div id="fb-root"></div>
+
+    <!-- Your Plugin chat code -->
+    <div id="fb-customer-chat" class="fb-customerchat">
+    </div>
+    <div class="header__content container">
+        <div class="header__content__logo" onclick="goDashBoard()">
+            <img src="/images/png/logo_lienviet24h_new.png">
+        </div>
+        <div class="header__content__info">
+            <div class="__info_type">
+                <img src="/images/svg/ic_bell.svg" alt="" onclick="showNotify()">
+                <!--                <span th:text = "${numberUnview}" style="display: inline-block;-->
+                <!--    background: #ee7523;-->
+                <!--    width: 15px;-->
+                <!--    height: 15px;-->
+                <!--    border-radius: 50%;-->
+                <!--    vertical-align: super;-->
+                <!--    font-size: 10px;"></span>-->
+                <div id="notify">
+    <div class="__list_alert" id="__list_alert">
+        <div class="__new_alert">
+            <ul class="__list_type_alert">
+                <!--                th:text="${session.totalUnview}"-->
+                <li class="active">
+                    <a onclick="getAll()" type="button">Tất cả
+                        <span>24</span>
+                    </a>
+                </li>
+                
+
+                
+                <li>
+                    <a onclick="getNotifyPersonal()" type="button">Cá nhân
+                        <span>10</span>
+                    </a>
+                </li>
+
+                
+                <li>
+                    <a onclick="getNotifySystem()" type="button">Hệ thống
+                        <span>14</span>
+                    </a>
+                </li>
+
+                
+                <li>
+                    <a onclick="getNotifyEvent()" type="button">Sự kiện
+                        <span>0</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+            <!--            All-->
+            <ul class="__list">
+                
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Thứ 6 ngày vàng: Ưu đãi 20% khi nạp thẻ</p>
+                            <p class="__content">
+
+✨ Với App của LPBank, bạn có thể:
+
+- Nạp tiền hay mua thẻ cào cho tất cả các nhà mạng di động tại Việt Nam: Viettel, Mobifone, VinaPhone, Vietnamobile, Gmobile...
+
+- Nạp nhanh chóng và tiện lợi chỉ với một vài thao thác đơn giản.
+
+- Giao...</p>
+                            <p class="__time">
+                                <span>08:30:00 13/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">10/12/2024|00:30|Tài khoản:0917811242|Số tiền GD:10,000|Số dư:76,000  VND|Nội dung:400933-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>00:30:48 10/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">10/12/2024|00:25|Tài khoản:0917811242|Số tiền GD:10,000|Số dư:66,000  VND|Nội dung:394343-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>00:25:58 10/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">10/12/2024|00:19|Tài khoản:0917811242|Số tiền GD:10,000|Số dư:56,000  VND|Nội dung:386159-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>00:19:18 10/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">10/12/2024|00:12|Tài khoản:0917811242|Số tiền GD:10,000|Số dư:46,000  VND|Nội dung:377858-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>00:12:55 10/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">10/12/2024|00:01|Tài khoản:0917811242|Số tiền GD:10,000|Số dư:36,000  VND|Nội dung:081402-MBVCB.7856586690.081402.TRAN DUY QUANG chuyen tien.CT tu 0621000456871 TRAN DUY QUANG toi 0917811242 PHAM THI UYEN NHI tai </p>
+                            <p class="__time">
+                                <span>00:03:39 10/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">09/12/2024|23:46|Tài khoản:0917811242|Số tiền GD:5,000|Số dư:26,000  VND|Nội dung:335074-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>23:46:30 09/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">09/12/2024|23:40|Tài khoản:0917811242|Số tiền GD:10,000|Số dư:21,000  VND|Nội dung:325399-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>23:40:48 09/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">09/12/2024|22:27|Tài khoản:0917811242|Số tiền GD:10,000|Số dư:11,000  VND|Nội dung:145454-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>22:27:07 09/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">09/12/2024|13:39|Tài khoản:0917811242|Số tiền GD:-10,000,000|Số dư:1,000  VND|Nội dung:PHAM THI UYEN NHI chuyen tien ma GD 273527999 </p>
+                            <p class="__time">
+                                <span>13:39:48 09/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">LPBank: Thông báo biến động số dư</p>
+                            <p class="__content">09/12/2024|13:37|Tài khoản:0917811242|Số tiền GD:10,001,000|Số dư:10,001,000  VND|Nội dung:197430-Pham Thi Uyen Nhi chuyen tien </p>
+                            <p class="__time">
+                                <span>13:37:58 09/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">X1.5 tiền hoàn cơ bản trên “Mua sắm hoàn tiền”</p>
+                            <p class="__content">
+
+ 
+
+LPBank x Shopee dành tặng bạn ưu đãi “Hoàn tiền gấp rưỡi” khi shopping qua tính năng “Mua sắm hoàn tiền” trên ứng dụng LPBank!
+
+👉 Đừng bỏ lỡ cơ hội mua sắm đồ Giáng Sinh, sắm Tết sớm ngay từ bây giờ!
+
+ 
+
+Chi tiết ưu đãi:
+
+📍 X1.5...</p>
+                            <p class="__time">
+                                <span>10:15:00 06/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Hotline Lộc Phát, liên hệ dễ dàng ⚡</p>
+                            <p class="__content"> 
+
+&lt;img src=&quot;https://content.lienviet24h.vn/share/IMG_8624.jpg
+&quot; style=&quot;display:inline; height:auto; max-width:700px; width:100%&quot; /&gt;
+
+ 
+
+Từ ngày 01/12/2024, LPBank chính thức triển khai số Hotline mới *8668 ngắn gọn và dễ nhớ, mang đến cho ...</p>
+                            <p class="__time">
+                                <span>15:45:00 03/12/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Thông báo gia hạn chương trình “Giới thiệu bạn mới”</p>
+                            <p class="__content">&lt;img src=&quot;https://content.lienviet24h.vn/share/Gia%20h%E1%BA%A1n%20th%E1%BB%9Di%20gian%20t%E1%BB%9Bi%203112_1x1%20-%20social%20copy.png
+&quot; style=&quot;display:inline; height:auto; max-width:700px; width:100%&quot; /&gt;
+
+Bạn bè chia ngọt sẻ bùi
+
+Cùng nhau ...</p>
+                            <p class="__time">
+                                <span>08:00:00 30/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Thông báo nâng cấp hệ thống</p>
+                            <p class="__content">
+
+Kính gửi Quý khách hàng,
+
+Nhằm nâng cao chất lượng dịch vụ và trải nghiệm tốt hơn tới Quý khách hàng, LPBank sẽ tiến hành cập nhật hệ thống trong khoảng thời gian từ 03h00 đến 05h15 và từ 22h00 đến 23h55 ngày 30/11/2024. Trong thời gian trên...</p>
+                            <p class="__time">
+                                <span>18:00:00 29/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Thông báo nâng cấp hệ thống</p>
+                            <p class="__content">
+
+Kính gửi Quý khách hàng,
+
+Nhằm nâng cao chất lượng dịch vụ và trải nghiệm tốt hơn tới Quý khách hàng, LPBank sẽ tiến hành cập nhật hệ thống trong khoảng thời gian từ 03h00 đến 05h15 và từ 22h00 đến 23h55 ngày 30/11/2024. Trong thời gian trên...</p>
+                            <p class="__time">
+                                <span>13:00:00 29/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">🛫 VAY NHANH HƠN GIÓ, 1 PHÚT LÀ CÓ 💰</p>
+                            <p class="__content">
+
+💰 VAY NHANH HƠN GIÓ, 1 PHÚT LÀ CÓ 💰
+
+Chỉ còn hơn 2 tháng nữa là đến Tết, biết bao nhiêu kế hoạch chưa thực hiện, hóa đơn đang đợi thanh toán mà tiền tiết kiệm vẫn chưa đến kỳ đáo hạn?
+👉 Tạm biệt những quy trình vay rườm rà, LPBank mang t...</p>
+                            <p class="__time">
+                                <span>17:00:00 27/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">📣Săn Jackpot khủng với Vietlott SMS💥</p>
+                            <p class="__content">👉Với công nghệ số từ ứng dụng LPBank, việc mua xổ số Vietlott trở nên dễ dàng hơn bao giờ hết, chỉ cần mở app chọn tính năng Vietlott SMS và thực hiện vài thao tác đơn giản, siêu tiện lợi, mọi lúc mọi nơi.
+
+✅Tự động thông báo ngay khi có kết qu...</p>
+                            <p class="__time">
+                                <span>15:15:00 27/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">HOT 🔥 TÀI KHOẢN SINH LỜI LỘC PHÁT</p>
+                            <p class="__content">
+
+ 
+
+- Bạn cần tiền có sẵn trong tài khoản để chi tiêu khi cần? 
+- Bạn muốn tiền nhàn rỗi có thể sinh lời mọi lúc mọi nơi với tỷ suất tốt nhất? 
+Kích hoạt ngay tính năng Sinh lời Lộc Phát của LPBank để tiền trong tài khoản vừa sẵn sàng cho m...</p>
+                            <p class="__time">
+                                <span>10:30:00 26/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">❗❗Khách hàng cần cập nhật thông tin giấy tờ tùy thân và bổ sung dữ liệu sinh trắc học</p>
+                            <p class="__content">
+
+📌 Căn cứ Luật Căn cước 2023, căn cứ theo thông tư 17 và 18 của Ngân hàng Nhà nước:
+
+- Từ ngày 01/01/2025: Khách hàng không thể sử dụng Chứng minh nhân dân (bao gồm loại 9 số và 12 số) để thực hiện các giao dịch tại Ngân hàng.
+
+- Từ ngày 0...</p>
+                            <p class="__time">
+                                <span>10:38:00 21/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Thử vận may ngay hôm nay - với Vietlott SMS!</p>
+                            <p class="__content">✅Đặt bước chân đầu tiên trên con đường đến với những điều kỳ diệu! Chỉ vài giây với những bước thao tác đơn giản, tiện lợi, bạn đã mang đến cho mình cơ hội đổi thay lớn lao. 
+
+👉Với công nghệ số từ ứng dụng LPBank, chúng tôi hi vọng mỗi tấm vé m...</p>
+                            <p class="__time">
+                                <span>15:45:00 20/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Rủ bạn &quot;nhập hội&quot;, nhận ngay &quot;quà đôi&quot;</p>
+                            <p class="__content">&lt;img src=&quot;https://content.lienviet24h.vn/share/464480831_605409728476977_1875437297339444375_n.jpg
+&quot; style=&quot;display:inline; height:auto; max-width:700px; width:100%&quot; /&gt;
+
+Từ nay đến hết 31/12/2024, nhận ngay 80K cho &quot;đôi bạn&quot; cùng cơ hội tích lũ...</p>
+                            <p class="__time">
+                                <span>18:00:00 19/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Thử vận may hôm nay - với Vietlott SMS ngay!</p>
+                            <p class="__content">✅Đặt bước chân đầu tiên trên con đường đến với những điều kỳ diệu! Chỉ vài giây với những bước thao tác đơn giản, tiện lợi, bạn đã mang đến cho mình cơ hội đổi thay lớn lao. 
+
+👉Với công nghệ số từ ứng dụng LPBank, chúng tôi hi vọng mỗi tấm vé m...</p>
+                            <p class="__time">
+                                <span>18:50:00 15/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+                <li name="listView">
+                    <div class="__icon">
+                        <img src="/images/png_new/ic_alert_ct.png" alt="">
+                    </div>
+<!--                    <th:block th:if="${object.viewStatus}" th:switch="${object.viewStatus}">-->
+                        
+                        <div  class="__content_alert ">
+                            <p class="__title">Cảnh giác với thủ đoạn đọc trộm thông tin thẻ (skimming) tại ATM/CDM</p>
+                            <p class="__content">
+
+ 
+
+📍Thời gian gần đây, thị trường xuất hiện phương thức đánh cắp thông tin thẻ bằng thiết bị đọc trộm dữ liệu (skimming) tại các cây ATM/CDM với mục đích làm thẻ giả nhằm chiếm đoạt tài sản của chủ thẻ.
+
+📍Để đảm bảo an toàn và tránh rủi ...</p>
+                            <p class="__time">
+                                <span>10:00:00 14/11/2024</span>
+                                <span class="__view_detail">
+                                    
+                                    <!--                                        <a th:unless="${object.transId != null}" th:text="#{notify.detail}"></a>-->
+                                </span>
+                            </p>
+                        </div>
+<!--                    </th:block>-->
+                </li>
+            </ul>
+            <!--            personal-->
+            
+            <!--            System-->
+            
+            <!--            Event-->
+            
+
+        
+        <div class="__all_view">
+            <a href="/notification/getAll">
+                <img src="/images/png_new/ic_read_alert.png" alt="">Đánh dấu đã đọc</img>
+            </a>
+            <a onclick="deleteAll()" style="cursor: pointer;">
+                <img src="/images/png_new/ic_del_alert.png" alt="">Xóa tất cả</img>
+            </a>
+        </div>
+    </div>
+</div>
+            </div>
+            <div class="btn-group">
+                <div class="__info_type" id="dropdownProfileButton"
+                     data-target="dropdownProfile"
+                     data-toggle="dropdown" data-hover="dropdown" aria-haspopup="true" aria-expanded="false">
+                    
+                    <img src="">
+                    <input hidden value="0917811242" id="userName">
+                    <span class="dropdown-toggle" id="custName">PHẠM THỊ UYỂN NHI</span>
+                </div>
+                <div class="__info_type --menu" id="menu_mobile">
+                    <img src="/images/svg/ic_menu.svg" alt="">
+                </div>
+                <div class="dropdown-menu" aria-labelledby="dropdownProfile" id="dropdownProfile">
+                    <a class="dropdown-item" href="/changepass">Đổi mật khẩu</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/logout">Đăng xuất</a>
+                </div>
+            </div>
+            <div class="btn-group">
+                <div class="__info_type" id="dropdownLanguageButton" data-target="dropdownLanguage"
+                     data-toggle="dropdown" data-hover="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="/images/png/vn.png" alt="">
+                    <span class="d-none d-md-inline">Việt Nam</span>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="dropdownLanguage" id="dropdownLanguage">
+                    <div class="dropdown-item changeLanguage" onclick="changeLang(&#39;vi&#39;)">
+                        <img src="/images/png/vn.png" alt="">
+                        <span class="d-none d-md-inline">Việt Nam</span>
+                    </div>
+					<!--<div class="dropdown-item changeLanguage" th:onclick="'changeLang(\'' +#{app.language.en.value} +'\')'">
+                        <img th:src="@{/images/png/language.png}">
+                        <span class="d-none d-md-inline" data-th-text="#{app.language.en.title}"></span>
+                    </div> -->
+
+    <!--                <div class="dropdown-divider"></div>-->
+    <!--                <a class="dropdown-item" href="/logout" th:text="#{layout.logout}"></a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="bg_main">
+    <main>
+        <div class="banner_header align-center container">
+    <picture>
+        <source media="(min-width:768px)" src="/images/png_new/banner_new.png">
+        <img src="/images/png_new/banner_new.png" loading="lazy" style="width:auto;">
+    </picture>
+    <div class="menu">
+    <div class="menu__title --type1">
+        <a href="">Thường dùng</a>
+    </div>
+    <div class="menu_item">
+        <ul id="menu_slide">
+            <li><a class="menuClick">&nbsp;</a></li>
+        </ul>
+    </div>
+
+</div>
+</div>
+        <div class="wrapper-content">
+            <div class="container">
+            	<input id="needChangePass" name="needChangePass" value="N" hidden>
+                <div class="wrapper-content__name">
+    <div class="wrapper-content__info__main --url">
+        <a href="/dashboard">Trang chủ</a>
+        
+        
+    </div>
+    <!--    <div class="wrapper-content__info__main &#45;&#45;welcome">-->
+    <!--        <span th:text="#{fra.breadcrumb.welcome}"></span> <span class="d-none d-md-inline">-</span> <span th:text="${#authentication.userSession.custName}"></span>-->
+    <!--    </div>-->
+    <div class="wrapper-content__info__main --setting align-right">
+
+        <div class="relative __setting_btn">
+            <a class="">Cài đặt</a>
+            <div class="tooltip_setting">
+                <ul>
+                    <li>
+                        <a class="__user" href="/settings/customer/">Thông tin cá nhân</a>
+                    </li>
+                    <li>
+                        <a class="__authen" href="/settings/verification/">Xác thực tài khoản</a>
+                    </li>
+                    <!-- <li>
+                        <a class="__method_authen"
+                           data-th-text="#{common.settings.FormsOfTransactionAuthentication}"></a>
+                    </li> -->
+                    <!-- <li>
+                        <a class="__setting_3" th:text="#{common.settings.SetTransactionLimit}" href="/404"></a>
+                    </li>
+                    <li>
+                        <a class="__contact" th:text="#{common.settings.ManageTransactionDirectory}"
+                           href="/404"></a>
+                    </li> -->
+                    <li>
+                        <a class="__manager" href="/settings/linked/">Liên kết thẻ/tài khoản ngân hàng</a>
+                    </li>
+                    <li>
+                        <a class="__email" href="/settings/email/">Quản lý email</a>
+                    </li>
+                    <li>
+                        <a class="__method_authen" href="/smartotp/">LPB OTP</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--        <a data-th-text="#{fra.breadcrumb.setting}" onclick="dow()" id="setting"><img src="/images/svg/ic_dropdown.svg"-->
+        <!--                                                                                      alt=""></a>-->
+    </div>
+</div>
+                <div class="wrapper-content__info">
+                    <div class="wrapper-content__info__main --service" id="list_menu">
+    <div class="__menu-mobile">
+        <ul>
+            <li><a id="display_menu_mobile" href="#"><img src="/images/svg/ic_back_menu.svg" alt=""></a></li>
+            <li><a href=""><img src="/images/svg/ic_home_menu.svg" alt=""></a></li>
+            <li><a href="" class="active"><img src="/images/svg/ic_list_menu.svg" alt=""></a></li>
+        </ul>
+        <a class="leng" href=""><img src="/images/svg/ic_flag_menu.svg" alt=""></a>
+    </div>
+
+    <ul class="listService">
+        <li><a class="--all-service">Tất cả dịch vụ</a></li>
+<!--            <ul class="d-md-block">-->
+        <!-- menu tuanln1-->
+        <li>
+            <a class="--account-card --child"><span>Tài khoản/thẻ</span></a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/mycard/" id="D_LIST_CARD_WEB" class="menuClick"
+                       data-url="/mycard/" data-orderno="11">
+                        <span>Danh sách thẻ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/myaccount/" id="D_LIST_ACCOUNT_WEB" class="menuClick"
+                       data-url="/myaccount/" data-orderno="12">
+                        <span>Danh sách tài khoản</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            <a class="--transfers --child"><span>Chuyển tiền</span></a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/transfer/m2wallet/" id="D_TRANSFER_EWALLET" class="menuClick"
+                       data-url="/transfer/m2wallet/" data-orderno="1">
+                        <span>Đến TK Ví Việt</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/transfer/m2lpb/" id="D_TRANSFER_TO_LPB_ACCOUNT" class="menuClick"
+                       data-url="/transfer/m2lpb/" data-orderno="2">
+                        <span>Đến TK LPBank</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/transfer/m2bankacc/" id="D_TRANSFER_DOMESTIC_ACCOUNT" class="menuClick"
+                       data-url="/transfer/m2bankacc/" data-orderno="3">
+                        <span>Đến TK NH khác 24/7</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/transfer/m2bankcard/" id="D_TRANSFER_ATM_CARD" class="menuClick"
+                       data-url="/transfer/m2bankcard/" data-orderno="4">
+                        <span>Đến Thẻ NH khác 24/7</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/transfer/m2citad/" id="D_TRANSFER_TO_OTHER_BANK_CITAD" class="menuClick"
+                       data-url="/transfer/m2citad/" data-orderno="5">
+                        <span>Đến TK NH khác</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/transfer/m2multi_wallet/" id="D_TRANSFER_LIST_EWALLET" class="menuClick"
+                       data-url="/transfer/m2multi_wallet/" data-orderno="6">
+                        <span>Đến nhiều TK Ví Việt</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/transfer/m2suggest/" id="D_REQUEST_TRANSFER" class="menuClick"
+                       data-url="/transfer/m2suggest/" data-orderno="7">
+                        <span>Đề nghị chuyển tiền</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            <a class="--payments --child"><span>Thanh toán</span></a>
+            
+            
+            
+            
+            
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/payment/insurance/" id="D_PAYBILL_INSURRANCE" class="menuClick"
+                       data-url="/payment/insurance/" data-orderno="1">
+                        <span>Thanh toán bảo hiểm</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/payment/mobile/" id="D_RECHARGE" class="menuClick"
+                       data-url="/payment/mobile/" data-orderno="1">
+                        <span>Nạp tiền điện thoại</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/payment/ui/" id="D_PAY_BILL" class="menuClick"
+                       data-url="/payment/ui/" data-orderno="7">
+                        <span>Thanh toán hóa đơn</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/payment/shopping/" id="D_ONLINE_SHOPPING" class="menuClick"
+                       data-url="/payment/shopping/" data-orderno="9">
+                        <span>Mua sắm online</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            
+            <a class="--viviet --child"><span>Ví Việt</span></a>
+            
+            
+            
+            
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/deposit/fromLpb/" id="D_DEPOSIT_EWALLET_LPB_ACCOUNT" class="menuClick"
+                       data-url="/deposit/fromLpb/" data-orderno="1">
+                        <span>Từ TK LPBank</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/withdrawal/toLpb/" id="D_WITHDRAW_EWALLET_LPB_ACCOUNT" class="menuClick"
+                       data-url="/withdrawal/toLpb/" data-orderno="1">
+                        <span>Về TK LPBank</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/withdrawal/toBankOther/" id="D_WITHDRAW_EWALLET_ATM" class="menuClick"
+                       data-url="/withdrawal/toBankOther/" data-orderno="2">
+                        <span>Về Thẻ/TK NH khác</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/deposit/bankOther/" id="D_DEPOSIT_EWALLET_OTHER_ACCOUNT" class="menuClick"
+                       data-url="/deposit/bankOther/" data-orderno="2">
+                        <span>Từ TK NH khác</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            
+            
+            <a class="--savings --child maintain"><span>Tiết kiệm</span></a>
+            
+            
+            
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/savings/create/" id="D_SAVINGS_REGULAR" class="menuClick"
+                       data-url="/savings/create/" data-orderno="1">
+                        <span>Gửi tiết kiệm</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/savings/query/" id="D_SAVINGS_INQUERY" class="menuClick"
+                       data-url="/savings/query/" data-orderno="4">
+                        <span>Truy vấn tiết kiệm</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/savings/redeem/" id="D_SAVINGS_REDEEM" class="menuClick"
+                       data-url="/savings/redeem/" data-orderno="5">
+                        <span>Tất toán tiền gửi tiết kiệm</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            
+            
+            
+            <a class="--credit --child maintain"><span>Tín dụng</span> (Đang nâng cấp)</a>
+            
+            
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/query/credit/" id="D_QUERY_CREDIT" class="menuClick"
+                       data-url="/query/credit/" data-orderno="2">
+                        <span>Tra cứu tín dụng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/loan/inquiry/" id="D_LOANS_INQUERY" class="menuClick"
+                       data-url="/loan/inquiry/" data-orderno="2">
+                        <span>Truy vấn khoản vay</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/loan/payment/" id="D_LOANS_PAYMENT" class="menuClick"
+                       data-url="/loan/payment/" data-orderno="3">
+                        <span>Trả nợ/Tất toán khoản vay</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            
+            
+            
+            
+            <a class="--card --child maintain"><span>Dịch vụ thẻ</span> (Đang nâng cấp)</a>
+            
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/autopay/credit/" id="D_AUTO_PAYMENT_CREDIT" class="menuClick"
+                       data-url="/autopay/credit/" data-orderno="6">
+                        <span>Ủy thác thanh toán Thẻ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/pay/credit/" id="D_PAYBILL_CREDIT_CARD" class="menuClick"
+                       data-url="/pay/credit/" data-orderno="18">
+                        <span>Dư nợ Thẻ tín dụng</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            
+            
+            
+            
+            
+            <a class="--utilities --child maintain"><span>Tiện ích</span></a>
+            
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/commission/" id="D_AUTO_PAYMENT" class="menuClick"
+                       data-url="/commission/" data-orderno="1">
+                        <span>Ủy thác thanh toán</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/claim/ptidelayfight/" id="D_PTI_DELAY_FIGHT_CLAIM" class="menuClick"
+                       data-url="/claim/ptidelayfight/" data-orderno="2">
+                        <span>Bồi thường trễ chuyến</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/gift/" id="D_GIFT" class="menuClick"
+                       data-url="/gift/" data-orderno="4">
+                        <span>Quà tặng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/lookup/" id="D_LOOK_UP" class="menuClick"
+                       data-url="/lookup/" data-orderno="5">
+                        <span>Tra cứu thông tin</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/map/ui/" id="D_LOOK_UP_LOCATION_WEB" class="menuClick"
+                       data-url="/map/ui/" data-orderno="10">
+                        <span>Tra cứu địa điểm</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/invite/user" id="D_INVITE_FRIEND_WEB" class="menuClick"
+                       data-url="/invite/user" data-orderno="14">
+                        <span>Giới thiệu bạn bè</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a class="--news --child"><span>Tin tức</span></a>
+            
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/promotion/" id="D_PROMOTION_WEB" class="menuClick"
+                       data-url="/promotion/" data-orderno="13">
+                        <span>Khuyến mại</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a class="--support --child"><span>Trợ giúp</span></a>
+            
+
+            <ul class="listService__child">
+                <li>
+                    <a href="/suport/instructuser/" id="D_USER_GUIDE_WEB" class="menuClick"
+                       data-url="/suport/instructuser/" data-orderno="16">
+                        <span>Hướng dẫn sử dụng</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+<!--            </ul>-->
+    </ul>
+    
+    <style>
+    	.--card, .--credit{
+    		pointer-events:none;
+    	}
+    </style>
+    
+</div>
+                    <div class="wrapper-content__info__main --listaccount__user">
+    
+    <h3>Danh sách tài khoản</h3>
+
+    <!-- <div class="__type_account">
+        <a class="active" th:href="@{../myaccount}" th:text="#{login.user}"></a>
+        <a th:href="@{../myaccount/saving}" th:text="#{account.saving}"></a>
+        <a th:href="@{../myaccount/loan}" th:text="#{account.loan}"></a>
+    </div> -->
+    <ul id="account_list_ul" class="ssc ssc-card">
+        <div class="ssc-wrapper">
+            <div class="flex align-start">
+                <div class="w-100">
+                    <div class="ssc-head-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-head-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-head-line mb"></div>
+                </div>
+            </div>
+        </div>
+    </ul>
+
+</div>
+                    <div class="wrapper-content__info__main --transaction">
+    
+    <h3>Giao dịch gần đây</h3>
+    <ul id="transaction_history_ul" class="ssc ssc-card">
+        <div class="ssc-wrapper">
+            <div class="flex align-start">
+                <div class="w-100">
+                    <div class="ssc-head-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-head-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-head-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                    <div class="ssc-line mb w-100"></div>
+                </div>
+            </div>
+        </div>
+    </ul>
+
+</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+    <div class="footer">
+        <div class="container">
+            <div class="footer__content --logo">
+                <img src="/images/png/logo_lienviet24h_footer_new.png" alt="">
+            </div>
+            <div class="footer__content --name">
+                <h3>Ngân hàng TMCP Lộc Phát Việt Nam</h3>
+                <p class="--address">LPB Tower, số 210 Trần Quang Khải, Quận Hoàn Kiếm, Hà Nội</p>
+                <p class="--main">dichvukhachhang@lpbank.com.vn</p>
+                <div class="--hotline">
+                    <p>Đường dây nóng</p>
+                    <h3>1800 57 77 58</h3>
+                </div>
+            </div>
+            <div class="footer__content --introduce">
+                <h3>WEBSITE LPBANK</h3>
+                <ul>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li>
+                        <a>Hướng dẫn sử dụng</a>
+                        <p>
+                            <a class="--btn" href="/suport/instructuser/">Cá nhân</a>
+                            <a class="--btn" >Doanh nghiệp</a>
+                        </p>
+                    </li>
+                    <li><a href="#">Điều khoản sử dụng</a></li>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div class="footer__content --share">
+                <h3>Chia sẻ</h3>
+                <p><a class="--facebook" href="#">Facebook</a></p>
+                <p><a class="--google" href="#">Google</a></p>
+                <p><a class="--youtube" href="#">Youtube</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="end">
+        <div class="container">
+            <p>Copyright © 2020 - LPBank. All rights reserved</p>
+            <p>
+                Tải Ứng dụng LPBank tại:
+                <a class="--appstore" href="#"><img src="/images/png/appstore.png" alt=""></a>
+                <a class="--googleplay" href="#"><img src="/images/png/googplay.png" alt=""></a>
+            </p>
+        </div>
+    </div>
+</footer>
+</div>
+
+</body>
+</html>
