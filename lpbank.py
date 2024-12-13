@@ -268,7 +268,7 @@ class LPBank:
                     transaction = {
                         'date_time': cols[0].get_text(strip=True),
                         'amount': int(amount) if amount.startswith('+') else -int(amount[1:]),
-                        'current_balance': int(current_balance) if current_balance.startswith('+') else -int(current_balance[1:]),
+                        'current_balance': int(current_balance),
                         'remark': cols[3].get_text(strip=True),
                     }
                     transactions.append(transaction)
