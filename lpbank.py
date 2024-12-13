@@ -1,4 +1,6 @@
 import hashlib
+import math
+import pandas as pd
 import requests
 import json
 import time
@@ -17,12 +19,17 @@ import random
 
 class LPBank:
     def __init__(self,username, password, account_number,proxy_list=None):
+        self.transactions = []
         self.proxy_list = proxy_list
         self.proxy_cycle = cycle(self.proxy_list) if self.proxy_list else None
         self.url = {
             'login': 'https://ebanking.lpbank.com.vn/nhs-khcn/login',
             'account_list':'https://ebanking.lpbank.com.vn/dashboard/list_account',
-            'captcha': 'https://ebanking.lpbank.com.vn/captcha'
+            'captcha': 'https://ebanking.lpbank.com.vn/captcha',
+            'transactions_base': 'https://ebanking.lpbank.com.vn/dashboard/transaction_history',
+            'transactions': lambda account_number,from_date,to_date : f'https://ebanking.lpbank.com.vn/myaccount/pay/statament/?src={account_number}&fromDate={urllib.parse.quote(from_date)}&endDate={urllib.parse.quote(to_date)}&timeStyle=A',
+            'transactions_limit': lambda size,page : f'https://ebanking.lpbank.com.vn/myaccount/pay/paging?size={int(size)}&page={int(page)}'
+
         }
         if self.proxy_list:
             self.proxy_info = random.choice(self.proxy_list)
@@ -147,6 +154,10 @@ class LPBank:
         pattern = r'<input type="hidden" name="_csrf" value="(.*)"/>'
         match = re.search(pattern, html_content)
         return match.group(1) if match else None
+    def extract_total_page(self,html_content):
+        pattern = r' / <span>([0-9]+)</span>'
+        match = re.search(pattern, html_content)
+        return match.group(1) if match else None
     def extract_accounts(self,html):
         """
         Extracts account numbers and balances from the given HTML.
@@ -177,6 +188,42 @@ class LPBank:
                 })
 
         return accounts
+    def extract_transactions(self,html):
+        """
+        Extracts transaction records from the given HTML.
+
+        Args:
+            html (str): The HTML string to parse.
+
+        Returns:
+            list: A list of dictionaries with transaction details: 'date', 'amount', 'current_balance', and 'description'.
+        """
+        soup = BeautifulSoup(html, 'html.parser')
+        transactions = []
+
+        # Locate all rows within the table body
+        rows = soup.select('table tbody tr')
+
+        for row in rows:
+            cells = row.find_all('td')
+
+            if len(cells) == 4:
+                date = cells[0].text.strip()
+                amount_text = cells[1].text.strip()
+                current_balance = cells[2].text.strip()
+                description = cells[3].text.strip()
+
+                # Convert amount to integer, handling '+' and '-' signs directly
+                amount = int(amount_text.replace(',', '').replace('+', ''))
+
+                transactions.append({
+                    'date': date,
+                    'amount': amount,
+                    'current_balance': current_balance,
+                    'description': description
+                })
+
+        return transactions
     def extract_balance_from_td(self,td_string):
         balance_pattern = r"(\d{1,3}(?:,\d{3})*\.\d{2})"
         balances = re.findall(balance_pattern, td_string)
@@ -194,28 +241,46 @@ class LPBank:
         if ac_element:
             ac_text = ac_element.get_text(strip=True)
         return float(ac_text.strip().replace('.', '').replace(',','.')) if ac_element else None
-    def extract_transaction_history(self,html_string):
-        html_content = html_string.replace('undefined','').replace(' >','>').replace('< ','<')
-        soup = BeautifulSoup(html_content, 'html.parser')
-        transactions = []
+    def extract_transaction_history(self,html: str):
+        """
+        Extracts transaction history from the provided HTML string.
 
-        items = soup.find_all('div', class_='item-account-statement')
-        for item in items:
-            date_time = item.find('p', class_='mb-2 fs-small').text.strip()
-            description = item.find('p', class_='fw-bold m-0 text-break').text.strip()
-            transaction_code = item.find('span', class_='fw-bold').text.strip()
-            amount_element = item.find('p', class_='text-danger m-0 text-end fw-bold') or item.find('p', class_='text-green m-0 text-end fw-bold')
-            amount = amount_element.text.strip() if amount_element else 'N/A'
+        :param html: A string containing the HTML.
+        :return: A pandas DataFrame containing the extracted transaction history, or an empty DataFrame if an error occurs.
+        """
+        try:
+            # Parse the HTML using BeautifulSoup
+            soup = BeautifulSoup(html, 'html.parser')
             
-            transaction = {
-                'date_time': date_time,
-                'transaction_id': transaction_code,
-                'remark': description,
-                'amount': amount
-            }
-            transactions.append(transaction)
+            # Locate the table body
+            table_body = soup.find('tbody')
+            if not table_body:
+                return []  # Return an empty DataFrame
 
-        return transactions
+            # Extract rows
+            rows = table_body.find_all('tr')
+            transactions = []
+            
+            for row in rows:
+                cols = row.find_all('td')
+                if len(cols) == 4:
+                    amount = cols[1].get_text(strip=True).replace(',', '')
+                    current_balance = cols[2].get_text(strip=True).replace(',', '')
+                    transaction = {
+                        'date_time': cols[0].get_text(strip=True),
+                        'amount': int(amount) if amount.startswith('+') else -int(amount[1:]),
+                        'current_balance': int(current_balance) if current_balance.startswith('+') else -int(current_balance[1:]),
+                        'remark': cols[3].get_text(strip=True),
+                    }
+                    transactions.append(transaction)
+            
+            # Convert to pandas DataFrame
+            return transactions
+        
+        except Exception as e:
+            # Log the error (optional)
+            print(f"Error occurred: {e}")
+            return []
     def base_request_get(self,url):
         headers = {
         'Accept': 'text/html, */*; q=0.01',
@@ -239,11 +304,11 @@ class LPBank:
             return None
         return response
     def login(self,relogin=False):
-        # if not relogin:
-        #     balance_response = self.get_balance(self.account_number)
-        #     if balance_response['code'] != 500:
-        #         return balance_response
-        
+        if not relogin:
+            balance_response = self.get_balance(self.account_number)
+            if balance_response['code'] != 500:
+                return balance_response
+        self.session = requests.Session()
         base64_captcha_img = self.getCaptcha()
         result = self.createTaskCaptcha(base64_captcha_img)
         if 'prediction' in result and result['prediction']:
@@ -289,14 +354,18 @@ class LPBank:
             print('reason change proxy',e)
             self.change_proxy()
             return None
-        with open("login.html", "w", encoding="utf-8") as file:
-            file.write(response.text)
+        # with open("login.html", "w", encoding="utf-8") as file:
+        #     file.write(response.text)
         if 'https://ebanking.lpbank.com.vn/dashboard' in response.url:
             self.save_cookies(self.session.cookies)
             self.is_login = True
             self.time_login = time.time()
             self.save_data()
-            return self.get_balance(self.account_number)
+            return {
+                    "success": True,
+                    "code": 200,
+                    "message": "Login Successfully!",
+            }
         else:
             error_message = self.extract_error_message(response.text)
             print(error_message)
@@ -328,7 +397,8 @@ class LPBank:
         return None
 
     def get_balance(self,account_number,retry=False):
-        if not self.is_login or time.time() - self.time_login > 9000:
+        print('get_balance')
+        if not self.is_login:
             self.is_login = True
             self.save_data()
             login = self.login(relogin=True)
@@ -353,42 +423,130 @@ class LPBank:
             if not retry:
                 return self.get_balance(account_number,retry=True)
             return {'code':500 ,'success': False, 'message': 'Unknown Error!','data':response.text} 
+    def get_transactions_base(self):
+        headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Connection': 'keep-alive',
+        'Referer': f'https://ebanking.lpbank.com.vn/myaccount/pay/{self.account_number}',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+        'X-Requested-With': 'XMLHttpRequest',
+        'sec-ch-ua': '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+        }
+        url = 'https://ebanking.lpbank.com.vn/myaccount/pay/paging?size=30'
+        response = self.session.get(url, headers=headers,proxies=self.proxies)
+        transaction_history = self.extract_transaction_history(response.text)
+        self.transactions = transaction_history
+        # with open(f"transaction_base.html", "w", encoding="utf-8") as file:
+        #     file.write(response.text)
+        return True
+    def get_transactions_by_page(self,page,limit,total_page):
+        headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Connection': 'keep-alive',
+        'Referer': f'https://ebanking.lpbank.com.vn/myaccount/pay/{self.account_number}',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+        'X-Requested-With': 'XMLHttpRequest',
+        'sec-ch-ua': '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+        }
+        url = (self.url['transactions_limit'](30,page))
+        response = self.session.get(url, headers=headers,proxies=self.proxies)
+        # with open(f"transaction_{page}.html", "w", encoding="utf-8") as file:
+        #     file.write(response.text)
+        transaction_history = self.extract_transaction_history(response.text)
 
-
-    def get_transactions(self,account_number,fromDate,toDate,latest=False,retry=False):
-        if not self.is_login or time.time() - self.time_login > 9000:
+        if page*30 < limit and page < int(total_page):
+            if transaction_history:
+                self.transactions += transaction_history
+            page=page+1
+        
+            return self.get_transactions_by_page(page,limit,total_page)
+        else:
+            if transaction_history:
+                self.transactions += transaction_history[:limit - (page-1)*30]
+                # print(len(self.transactions),transaction_history[:limit - (page-1)*30])
+        return True
+    
+    def get_transactions(self,account_number,from_date,to_date,limit,retry=False):
+        self.transactions = []
+        if not self.is_login:
             self.is_login = True
             self.save_data()
-            login = self.login()
+            login = self.login(relogin=True)
             if not login['success']:
                 return login
-        if latest:
-            url = f'https://digibank.lpbank.net.vn/account/quick-search/CASA/{account_number}/gdgn?_={str(int(time.time() * 1000))}'
-        else:
-            url = f'https://digibank.lpbank.net.vn/account/search-by-date/CASA/{account_number}/{fromDate}/{toDate}?_={str(int(time.time() * 1000))}'
-        response = self.base_request_get(url)
+        # response = self.base_request_get(self.url['transactions_base'])
+        # with open("transaction0.html", "w", encoding="utf-8") as file:
+        #     file.write(response.text)
+        response = self.base_request_get(f'https://ebanking.lpbank.com.vn/myaccount/pay/{account_number}')
+            
+        # print(self.url['transactions'](account_number,from_date,to_date))
+        headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Connection': 'keep-alive',
+        'Referer': f'https://ebanking.lpbank.com.vn/myaccount/pay/{account_number}',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0',
+        'X-Requested-With': 'XMLHttpRequest',
+        'sec-ch-ua': '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+        }
+        
+        url = (self.url['transactions'](account_number,from_date,to_date))
+        # url = (self.url['transactions_limit'](30,1))
+        response = self.session.get(url, headers=headers,proxies=self.proxies)
+        
         # with open("transaction.html", "w", encoding="utf-8") as file:
         #     file.write(response.text)
-        try:
-            response = response.json()
-        except:
+
+        response = response.text
+
+        total_page = self.extract_total_page(response)
+        if total_page:
+            total_page = math.ceil(int(total_page)*10/30)
+        else:
             self.is_login = False
             self.save_data()
             if not retry:
-                return self.get_transactions(account_number,fromDate,toDate,latest,retry=True)
-            return {'code':500 ,'success': False, 'message': 'Unknown Error!','data':response.text} 
-        # transactions =  self.extract_transaction_history(response.text)
-        if  'response' in response:
+                return self.get_transactions(account_number,from_date,to_date,limit,retry=True)
+            return {'code':500 ,'success': False, 'message': 'Unknown Error!','data':1} 
+        transactions =  self.extract_transaction_history(response)
+        
+        if transactions:
+            self.transactions = transactions
+            if limit < 10:
+                self.transactions = self.transactions[:limit]
+            if limit > 10:
+                self.get_transactions_base()
+                if limit < 30:
+                    self.transactions = self.transactions[:limit]
+            if limit > 30:
+                self.get_transactions_by_page(2,limit,total_page)
             return {'code':200,'success': True, 'message': 'Thành công',
                     'data':{
-                        'transactions':response['response'],
+                        'transactions':self.transactions,
             }}
         else:
-            return {'code':200,'success': True, 'message': 'Thành công',
-                    'data':{
-                        'message': 'No data',
-                        'transactions':[],
-                        'response':response
-            }}
+            self.is_login = False
+            self.save_data()
+            if not retry:
+                return self.get_transactions(account_number,from_date,to_date,limit,retry=True)
+            return {'code':500 ,'success': False, 'message': 'Unknown Error!','data':1} 
+        
 
 
