@@ -22,10 +22,10 @@ class LoginDetails(BaseModel):
     account_number: str
     proxy_list: list
 @app.post('/login', tags=["login"])
-async def login_api(input: LoginDetails):
+def login_api(input: LoginDetails):
     try:
         lpbank = LPBank(input.username, input.password, input.account_number,input.proxy_list)
-        session_raw = await lpbank.login()
+        session_raw = lpbank.login()
         return APIResponse.json_format(session_raw)
     except Exception as e:
         response = str(e)
@@ -35,10 +35,10 @@ async def login_api(input: LoginDetails):
     
 
 @app.post('/get_balance', tags=["get_balance"])
-async def get_balance_api(input: LoginDetails):
+def get_balance_api(input: LoginDetails):
     try:
         lpbank = LPBank(input.username, input.password, input.account_number,input.proxy_list)
-        balance = await lpbank.get_balance(input.account_number)
+        balance =  lpbank.get_balance(input.account_number)
         return APIResponse.json_format(balance)
     except Exception as e:
         response = str(e)
@@ -56,10 +56,10 @@ class Transactions(BaseModel):
     proxy_list: list
     
 @app.post('/get_transactions', tags=["get_transactions"])
-async def get_transactions_api(input: Transactions):
+def get_transactions_api(input: Transactions):
     try:
         lpbank = LPBank(input.username, input.password, input.account_number,input.proxy_list)
-        history = await lpbank.get_transactions(input.account_number,input.from_date,input.to_date,input.limit)
+        history =  lpbank.get_transactions(input.account_number,input.from_date,input.to_date,input.limit)
         return APIResponse.json_format(history)
     except Exception as e:
         response = str(e)

@@ -1,6 +1,5 @@
 import hashlib
 import math
-import pandas as pd
 import requests
 import json
 import time
@@ -306,6 +305,7 @@ class LPBank:
     def login(self,relogin=False):
         if not relogin:
             balance_response = self.get_balance(self.account_number)
+            print
             if balance_response['code'] != 500:
                 return balance_response
         self.session = requests.Session()
@@ -378,6 +378,20 @@ class LPBank:
                             "details": error_message
                         }
                 elif 'Thông tin đăng nhập của quý khách không đúng' in error_message:
+                    return {
+                            'success': False,
+                            'message': 'Đăng nhập không thành công!',
+                            'code': 444,
+                            "details": error_message
+                        }
+                elif 'không đúng' in error_message:
+                    return {
+                            'success': False,
+                            'message': 'Đăng nhập không thành công!',
+                            'code': 444,
+                            "details": error_message
+                        }
+                elif 'Thông tin đăng nhập' in error_message:
                     return {
                             'success': False,
                             'message': 'Đăng nhập không thành công!',
