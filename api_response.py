@@ -9,7 +9,7 @@ class APIResponse():
                 status_code = 500
 
             else:
-                if 'code' in response:
+                if not isinstance(response, str) and 'code' in response:
                     status_code = response['code']
                 else:
                     response = {'code': 500, 'success': False, 'message': response}

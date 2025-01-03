@@ -305,16 +305,17 @@ class LPBank:
     def login(self,relogin=False):
         if not relogin:
             balance_response = self.get_balance(self.account_number)
-            print
+            print(balance_response)
             if balance_response['code'] != 500:
                 return balance_response
         self.session = requests.Session()
         base64_captcha_img = self.getCaptcha()
         result = self.createTaskCaptcha(base64_captcha_img)
+        print(result)
         if 'prediction' in result and result['prediction']:
             captchaText = result['prediction']
         else:
-            return {"success": False, "msg": "Error solve captcha", "data": result}
+            return {'code':500,"success": False, "msg": "Error solve captcha", "data": result}
 
 
         response = self.base_request_get(self.url['login'])
