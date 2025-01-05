@@ -633,7 +633,7 @@ class LPBank:
                 "ip": "127.1.1.1",
                 "makerId": "LV24HWEB",
                 "language": "vi",
-                "userName": "0764237727",
+                "userName": self.username,
                 "sessionId": self.session_id,
                 "providerCode": "",
                 "sourceType": "COREBANK",
@@ -651,6 +651,7 @@ class LPBank:
                 "accountNo": account_number
             }
             }
+        print(payload)
         response = self.base_request_post(payload)
             
         if response and 'body' in response and 'resultCode' in response['body'] and response['body']['resultCode'] == "0":
