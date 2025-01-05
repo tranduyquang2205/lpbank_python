@@ -675,7 +675,7 @@ class LPBank:
             self.save_data()
             if not retry:
                 return self.get_transactions(account_number,from_date,to_date,limit,retry=True)
-            return {'code':500 ,'success': False, 'message': 'Unknown Error!','data':1} 
+            return {'code':500 ,'success': False, 'message': 'Unknown Error!','data':response} 
         
 
 
