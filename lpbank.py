@@ -138,8 +138,8 @@ class LPBank:
         hashed = hashlib.sha256(password.encode('utf-8')).hexdigest()
         return hashed
     def createTaskCaptcha(self, base64_img):
-        url_1 = 'https://captcha.pay2world.vip/lpbank'
-        url_2 = 'https://captcha1.pay2world.vip/lpbank'
+        url_1 = 'https://captcha1.pay2world.vip/lpbank'
+        url_2 = 'https://captcha.pay2world.vip/lpbank'
         url_3 = 'https://captcha2.pay2world.vip/lpbank'
         
         payload = json.dumps({
@@ -401,8 +401,8 @@ class LPBank:
                 return balance_response
         self.session = requests.Session()
         base64_captcha_img,captchaId = self.getCaptcha()
-        # result = self.createTaskCaptcha(base64_captcha_img)
-        result = solve_captcha_with_capsolver(base64_captcha_img)
+        result = self.createTaskCaptcha(base64_captcha_img)
+        # result = solve_captcha_with_capsolver(base64_captcha_img)
         if 'prediction' in result and result['prediction']:
             captchaText = result['prediction']
         else:
@@ -474,7 +474,7 @@ class LPBank:
 
     def get_balance(self,account_number,retry=False):
         print('get_balance')
-        if not self.is_login or time.time() - self.time_login > 900:
+        if not self.is_login or time.time() - self.time_login > 900 or 'userId' not in self.user_data:
             self.is_login = True
             self.save_data()
             login = self.login(relogin=True)
@@ -552,7 +552,6 @@ class LPBank:
         #     file.write(response.text)
         return True
     def get_transactions_by_page(self,page,limit,total_page,account_number,from_date,to_date):
-        print(page)
         clientRequestId = str(math.floor(random.random() * time.time()))
         payload = {
             "clientHeader": {
@@ -607,7 +606,7 @@ class LPBank:
     
     def get_transactions(self,account_number,from_date,to_date,limit,retry=False):
         self.transactions = []
-        if not self.is_login or time.time() - self.time_login > 900:
+        if not self.is_login or time.time() - self.time_login > 900 or 'userId' not in self.user_data:
             self.is_login = True
             self.save_data()
             login = self.login(relogin=True)
@@ -659,7 +658,6 @@ class LPBank:
             total_transactions  = response['body']['totalTransaction']
 
             total_page = math.ceil(int(total_transactions)/10)
-            print('total_page',total_page)
             transactions =  response['body']['transactionHistories']
             
             if transactions:
